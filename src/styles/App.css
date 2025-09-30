@@ -1,0 +1,67 @@
+/* Importe a fonte do Google Fonts no topo */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  background-color: #000;
+  color: #333;
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Garante que imagens pixeladas não fiquem borradas ao escalar */
+  image-rendering: pixelated; 
+}
+
+/* Estilos para a tela de resultado */
+.result-screen {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.result-content {
+  background-color: rgba(25, 25, 45, 0.85);
+  padding: 30px 40px;
+  border-radius: 15px;
+  color: white;
+  border: 6px solid #a4a4a4;
+  box-shadow: 0 0 0 5px #3c3c3c;
+  margin-bottom: 200px; /* Espaço para a caixa de diálogo abaixo */
+}
+
+.result-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #f0f0f0;
+}
+
+.result-content p {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.winner-course {
+  font-size: 2rem;
+  color: #FFD700; /* Cor dourada para destacar */
+  margin-top: 10px;
+  text-shadow: 3px 3px #000;
+  line-height: 1.2;
+}
+
+.restart-button {
+  z-index: 10;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
