@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 
 export const useTypewriter = (text, speed = 50) => {
   const [displayText, setDisplayText] = useState('');
+  const [isFinished, setIsFinished] = useState(false); // NOVO ESTADO
 
   useEffect(() => {
-    // Reseta o texto quando o texto de entrada muda
-    setDisplayText(''); 
+    setDisplayText('');
+    setIsFinished(false); // Reseta o estado ao mudar o texto
 
     if (text) {
       let i = 0;
@@ -15,15 +16,17 @@ export const useTypewriter = (text, speed = 50) => {
           i++;
         } else {
           clearInterval(typingInterval);
+          setIsFinished(true); // SINALIZA QUE TERMINOU!
         }
       }, speed);
 
-      // Limpa o intervalo quando o componente é desmontado ou o texto muda
       return () => {
         clearInterval(typingInterval);
       };
+    } else {
+        setIsFinished(true); // Se não há texto, considera como terminado
     }
   }, [text, speed]);
 
-  return displayText;
+  return [displayText, isFinished]; // RETORNA O TEXTO E O ESTADO
 };

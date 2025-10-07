@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DialogueBox from './components/DialogueBox';
 import './styles/App.css';
 
 // Importe suas imagens
- import startScreenBg from './assets/start-screen.jpg';
- import gameBg from './assets/game-background.jpg';
+import startScreenBg from './assets/start-screen.jpg';
+import gameBg from './assets/game-background.jpg';
 import professorSprite from './assets/professor.png';
 
 // --- BANCO DE DADOS DAS PERGUNTAS ---
@@ -28,39 +28,35 @@ const introScript = [
   { text: "Vou fazer algumas perguntas rápidas, ok? Você topa?", choices: ['Sim', 'Não'] },
 ];
 
-// Função para embaralhar as perguntas
 const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
 
 function App() {
-  // Estados do jogo: 'start', 'intro', 'quiz', 'result'
   const [gameState, setGameState] = useState('start');
   const [scriptIndex, setScriptIndex] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [scores, setScores] = useState({ Mecatrônica: 0, ADS: 0 });
+  const [userHasInteracted, setUserHasInteracted] = useState(false);
 
-  // Inicia o quiz embaralhando as perguntas
-  const startQuiz = () => {
-    setQuestions(shuffleArray([...allQuestions]));
-    setGameState('quiz');
-  };
-  
-  // Lida com as escolhas durante o diálogo e o quiz
+  // --- CONTROLE DE ÁUDIO ---
+  const backgroundMusicRef = useRef(new Audio('/8-bit-game-music-122259.mp3'));
+
+  useEffect(() => {
+    backgroundMusicRef.current.loop = true;
+    backgroundMusicRef.current.volume = 0.3;
+  }, []);
+
   const handleChoice = (choice) => {
-    // Se estamos na introdução
     if (gameState === 'intro') {
       if (choice === 'Sim') {
-        startQuiz(); // Começa o quiz
+        setQuestions(shuffleArray([...allQuestions]));
+        setGameState('quiz');
       } else {
-        // Se disser não, volta para a tela inicial
-        handleRestart(); 
+        handleRestart();
       }
       return;
     }
-    
-    // Se estamos no quiz
     if (gameState === 'quiz') {
-      // Se a resposta for "Sim", adiciona ponto ao curso correspondente
       if (choice === 'Sim') {
         const currentCourse = questions[currentQuestionIndex].course;
         setScores(prevScores => ({
@@ -68,8 +64,6 @@ function App() {
           [currentCourse]: prevScores[currentCourse] + 1,
         }));
       }
-
-      // Vai para a próxima pergunta ou para a tela de resultado
       if (currentQuestionIndex < questions.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
       } else {
@@ -78,9 +72,7 @@ function App() {
     }
   };
 
-  // Lida com o avanço do diálogo (clique ou Enter)
   const handleDialogueAdvance = () => {
-    // Só avança se não houver escolhas na tela
     if (gameState === 'intro' && !introScript[scriptIndex].choices) {
       if (scriptIndex < introScript.length - 1) {
         setScriptIndex(prev => prev + 1);
@@ -98,24 +90,41 @@ function App() {
     setScriptIndex(0);
     setCurrentQuestionIndex(0);
     setScores({ Mecatrônica: 0, ADS: 0 });
+    backgroundMusicRef.current.pause();
+    backgroundMusicRef.current.currentTime = 0;
   };
 
-  // --- RENDERIZAÇÃO DOS COMPONENTES ---
-
-  // 1. Tela de Início
-  if (gameState === 'start') {
-    return (
-      <div className="app-container" style={{ backgroundImage: `url(${startScreenBg})` }}>
-         <h1>DESCUBRA SEU CURSO</h1>
-         <button className="start-button" onClick={() => setGameState('intro')}>
-           Press Start
-         </button>
-      </div>
-    );
+  const handleFirstInteraction = () => {
+  if (!userHasInteracted) {
+    backgroundMusicRef.current.play().catch(e => console.error("Erro ao tocar música:", e));
+    setUserHasInteracted(true);
   }
+};
 
-  // 2. Tela de Resultado (Versão Melhorada)
-if (gameState === 'result') {
+  // --- RENDERIZAÇÃO ---
+
+  if (gameState === 'start') {
+  return (
+    <div 
+      className="app-container" 
+      style={{ backgroundImage: `url(${startScreenBg})` }}
+      onClick={handleFirstInteraction} // Adicione isso para capturar qualquer clique na tela
+    >
+       <h1>DESCUBRA SEU CURSO</h1>
+       <button 
+         className="start-button" 
+         onClick={() => {
+           handleFirstInteraction(); // Garante que a música toque
+           setGameState('intro'); // Inicia o jogo
+         }}
+       >
+         Press Start
+       </button>
+    </div>
+  );
+}
+
+  if (gameState === 'result') {
     let winner = 'Indefinido';
     let winnerMessage = `Parabéns! Com base nas suas respostas, este curso parece ser uma ótima escolha para você!`;
 
@@ -124,28 +133,23 @@ if (gameState === 'result') {
     } else if (scores.Mecatrônica > scores.ADS) {
       winner = 'Tecnólogo em Mecatrônica Industrial';
     } else {
-      // Mensagem para o caso de empate
       winner = 'Ambos os cursos!';
       winnerMessage = 'Você se saiu bem em ambas as áreas! Recomendamos pesquisar um pouco mais sobre os dois cursos.'
     }
     
     return (
        <div className="app-container result-screen" style={{ backgroundImage: `url(${gameBg})` }}>
-        {/* Removemos o professor para focar no resultado */}
         <div className="result-content">
             <h2>Resultado Final</h2>
             <p>Seu curso recomendado é:</p>
             <h1 className="winner-course">{winner}</h1>
         </div>
-        <DialogueBox 
-          text={winnerMessage} 
-        />
+        <DialogueBox text={winnerMessage} />
         <button className="restart-button" onClick={handleRestart}>Fazer o teste novamente</button>
       </div>
     );
   }
 
-  // 3. Tela de Jogo (Introdução e Quiz)
   const currentDialogue = gameState === 'intro' 
     ? introScript[scriptIndex] 
     : { text: questions[currentQuestionIndex]?.question, choices: ['Sim', 'Não'] };
@@ -163,25 +167,3 @@ if (gameState === 'result') {
 }
 
 export default App;
-
-// Adicione algumas classes CSS genéricas ao seu `App.css` para os novos elementos
-/* Em src/styles/App.css */
-/*
-  .start-button, .restart-button {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.5rem;
-    padding: 10px 20px;
-    cursor: pointer;
-    border: 4px solid #3c3c3c;
-    border-radius: 8px;
-  }
-  .restart-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
-  .sprite {
-    height: 300px;
-    margin-bottom: 180px;
-  }
-*/
