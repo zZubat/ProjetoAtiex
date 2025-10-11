@@ -9,16 +9,49 @@ import professorSprite from './assets/professor.png';
 
 // --- BANCO DE DADOS DAS PERGUNTAS ---
 const allQuestions = [
-  { question: 'Você gosta de entender como funcionam máquinas e equipamentos?', course: 'Mecatrônica' },
-  { question: 'Se interessa por automação e robótica?', course: 'Mecatrônica' },
-  { question: 'Gosta de colocar a mão na massa para montar ou consertar algo?', course: 'Mecatrônica' },
-  { question: 'Ficaria satisfeito em projetar sistemas que unem mecânica, eletrônica e informática?', course: 'Mecatrônica' },
-  { question: 'Se sente atraído por indústrias e ambientes tecnológicos?', course: 'Mecatrônica' },
-  { question: 'Você gosta de resolver problemas lógicos e desafios de raciocínio?', course: 'ADS' },
-  { question: 'Tem interesse em aprender linguagens de programação?', course: 'ADS' },
-  { question: 'Gosta da ideia de criar aplicativos ou sistemas para ajudar pessoas ou empresas?', course: 'ADS' },
-  { question: 'Se interessa por tecnologia da informação e inovação digital?', course: 'ADS' },
-  { question: 'Prefere trabalhar em projetos que envolvam análise de dados e software?', course: 'ADS' },
+    // --- MECATRÔNICA (Foco em Montagem, Conserto e Sistemas Físicos) ---
+    { 
+        question: 'Quando algo quebra em casa, você gosta de desmontar para entender como funciona e tentar consertar?', 
+        course: 'Mecatrônica' 
+    },
+    { 
+        question: 'Você prefere aprender na prática, mexendo em ferramentas e peças, do que lendo livros ou manuais?', 
+        course: 'Mecatrônica' 
+    },
+    { 
+        question: 'A ideia de criar máquinas ou robôs que fazem tarefas repetitivas (como em uma fábrica) parece mais interessante que criar um aplicativo?', 
+        course: 'Mecatrônica' 
+    },
+    { 
+        question: 'Você se sente atraído por indústrias, fábricas e o funcionamento de máquinas de produção?', 
+        course: 'Mecatrônica' 
+    },
+    { 
+        question: 'Gosta de pensar em como a eletricidade e a mecânica trabalham juntas em um objeto?', 
+        course: 'Mecatrônica' 
+    },
+    
+    // --- ADS (Foco em Lógica, Softwares e Soluções Digitais) ---
+    { 
+        question: 'Você gosta de jogos de raciocínio, enigmas e quebra-cabeças lógicos que exigem planejamento?', 
+        course: 'ADS' 
+    },
+    { 
+        question: 'Se você tivesse que automatizar uma tarefa, preferiria criar um programa no computador do que construir um aparato físico?', 
+        course: 'ADS' 
+    },
+    { 
+        question: 'Acha legal a ideia de organizar informações (como em planilhas ou listas) para que o computador as use de forma inteligente?', 
+        course: 'ADS' 
+    },
+    { 
+        question: 'Você se interessa mais por aplicativos, redes sociais e pelo desenvolvimento de novas tecnologias digitais?', 
+        course: 'ADS' 
+    },
+    { 
+        question: 'Gostaria de passar o tempo escrevendo códigos para resolver problemas, mesmo que o resultado final seja invisível (não físico)?', 
+        course: 'ADS' 
+    },
 ];
 
 // --- SCRIPT DE INTRODUÇÃO ---

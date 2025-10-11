@@ -1,22 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export const useTypewriter = (text, speed = 50) => {
   const [displayText, setDisplayText] = useState('');
-  const [isFinished, setIsFinished] = useState(false); // NOVO ESTADO
+  const [isFinished, setIsFinished] = useState(false);
+  
+
+  const charIndex = useRef(0);
 
   useEffect(() => {
+
+    charIndex.current = 0;
     setDisplayText('');
-    setIsFinished(false); // Reseta o estado ao mudar o texto
+    setIsFinished(false); 
 
     if (text) {
-      let i = 0;
       const typingInterval = setInterval(() => {
-        if (i < text.length) {
-          setDisplayText(prev => prev + text.charAt(i));
-          i++;
+
+        if (charIndex.current < text.length) {
+            
+
+          setDisplayText(text.substring(0, charIndex.current + 1));
+          
+          // 5. Incrementa a ref
+          charIndex.current += 1;
         } else {
           clearInterval(typingInterval);
-          setIsFinished(true); // SINALIZA QUE TERMINOU!
+          setIsFinished(true);
         }
       }, speed);
 
@@ -24,9 +33,9 @@ export const useTypewriter = (text, speed = 50) => {
         clearInterval(typingInterval);
       };
     } else {
-        setIsFinished(true); // Se não há texto, considera como terminado
+      setIsFinished(true);
     }
   }, [text, speed]);
 
-  return [displayText, isFinished]; // RETORNA O TEXTO E O ESTADO
+  return [displayText, isFinished];
 };
