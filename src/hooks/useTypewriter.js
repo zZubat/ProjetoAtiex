@@ -1,41 +1,42 @@
-import { useState, useEffect, useRef } from 'react';
+// src/hooks/useTypewriter.js
+import { useState, useEffect } from 'react';
 
-export const useTypewriter = (text, speed = 50) => {
+// Adiciona initialDelay (em ms) para controlar quando a digitação começa
+export const useTypewriter = (text, speed = 50, initialDelay = 0) => {
   const [displayText, setDisplayText] = useState('');
-  const [isFinished, setIsFinished] = useState(false);
-  
-
-  const charIndex = useRef(0);
 
   useEffect(() => {
-
-    charIndex.current = 0;
-    setDisplayText('');
-    setIsFinished(false); 
+    // Variáveis para armazenar os IDs dos timers para limpeza
+    let startTypingTimeout;
+    let typingInterval;
+    
+    // Reseta o texto no início de cada efeito
+    setDisplayText(''); 
 
     if (text) {
-      const typingInterval = setInterval(() => {
-
-        if (charIndex.current < text.length) {
-            
-
-          setDisplayText(text.substring(0, charIndex.current + 1));
-          
-          // 5. Incrementa a ref
-          charIndex.current += 1;
-        } else {
-          clearInterval(typingInterval);
-          setIsFinished(true);
-        }
-      }, speed);
-
-      return () => {
-        clearInterval(typingInterval);
-      };
-    } else {
-      setIsFinished(true);
+      // 1. Configura um temporizador para iniciar a digitação após o atraso inicial
+      startTypingTimeout = setTimeout(() => {
+        let i = 0;
+        typingInterval = setInterval(() => {
+          if (i < text.length) {
+            setDisplayText(prev => prev + text.charAt(i));
+            i++;
+          } else {
+            // Se o texto estiver completo, definimos o texto final de uma vez e paramos
+            setDisplayText(text); 
+            clearInterval(typingInterval);
+          }
+        }, speed);
+      }, initialDelay); 
     }
-  }, [text, speed]);
+    
+    // Função de limpeza: Garante que tanto o setTimeout quanto o setInterval sejam cancelados
+    return () => {
+      clearTimeout(startTypingTimeout);
+      clearInterval(typingInterval); 
+    };
 
-  return [displayText, isFinished];
+  }, [text, speed, initialDelay]);
+
+  return displayText;
 };

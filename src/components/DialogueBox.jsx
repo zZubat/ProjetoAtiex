@@ -1,33 +1,28 @@
 import React from 'react';
-import { useTypewriter } from '../hooks/useTypewriter';
-import './DialogueBox.css';
 
-const DialogueBox = ({ text, choices = [], onChoice }) => {
-  // Agora recebemos um array: [texto, terminouDeDigitar]
-  const [typedText, isTypingFinished] = useTypewriter(text);
-
-  // A nova condição é muito mais confiável!
-  const showChoices = isTypingFinished && choices.length > 0;
-
+function DialogueBox({ children, choices = [], onChoice }) {
   return (
-    <div className="dialogue-box-container">
-      <p className="dialogue-text">{typedText}</p>
+    <div className="dialogue-box">
+      {/* O conteúdo principal (texto da pergunta ou resultado) */}
+      <div className="dialogue-content">
+        {children}
+      </div>
 
-      {showChoices && (
-        <div className="choices-container">
+      {/* As opções de escolha (Sim/Não) */}
+      {choices.length > 0 && (
+        <div className="dialogue-choices">
           {choices.map((choice) => (
             <button
-              key={choice}
-              className="choice-button"
-              onClick={() => onChoice(choice)}
+              key={choice.text}
+              onClick={() => onChoice(choice.value)}
             >
-              {choice}
+              {choice.text}
             </button>
           ))}
         </div>
       )}
     </div>
   );
-};
+}
 
 export default DialogueBox;

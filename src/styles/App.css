@@ -1,67 +1,319 @@
-/* Importe a fonte do Google Fonts no topo */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-body {
-  background-color: #000;
-  color: #333;
+/* ---- RESET E FULL SCREEN ---- */
+html,
+body,
+#root,
+.app-wrapper,
+.container.start,
+.app-container {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
   margin: 0;
-  font-family: 'Press Start 2P', cursive;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: black;
 }
 
-.app-container {
-  width: 100vw;
-  height: 100vh;
+/* ---- FONT PIXELIZADA EM TODO O SITE ---- */
+body,
+html,
+#root,
+.app-wrapper,
+* {
+  font-family: 'Press Start 2P', monospace;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  color: white;
+}
+
+/* ---- ESTILOS GERAIS ---- */
+.app-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+}
+
+/* ---- TELA DE INÍCIO ---- */
+.container.start {
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Garante que imagens pixeladas não fiquem borradas ao escalar */
-  image-rendering: pixelated; 
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
-/* Estilos para a tela de resultado */
-.result-screen {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  flex-direction: column;
-}
-
-.result-content {
-  background-color: rgba(25, 25, 45, 0.85);
-  padding: 30px 40px;
-  border-radius: 15px;
-  color: white;
-  border: 6px solid #a4a4a4;
-  box-shadow: 0 0 0 5px #3c3c3c;
-  margin-bottom: 200px; /* Espaço para a caixa de diálogo abaixo */
-}
-
-.result-content h2 {
-  font-size: 1.5rem;
+/* DESCUBRA SEU CURSO */
+.title {
+  font-size: 5rem;
+  line-height: 1.2;
   margin-bottom: 20px;
-  color: #f0f0f0;
+  color: black;
+  z-index: 10;
 }
 
-.result-content p {
+.word {
+  display: inline-block;
+  opacity: 1;
+  transform: translateY(0);
+  animation: none;
+  color: black;
+}
+
+/* PRESS START */
+.press {
+  font-size: 2.5rem;
+  margin-top: 25px;
+  color: yellow;
+  text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black;
+  animation: blink 3s infinite;
+  animation-delay: 2s;
+  z-index: 10;
+}
+
+@keyframes blink {
+
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
+/* ---- PERSONAGENS ---- */
+img {
+  position: absolute;
+  user-select: none;
+  z-index: 5;
+}
+
+.bulbasaur {
+  bottom: 300px;
+  left: 15%;
+  width: 250px;
+}
+
+.charmander {
+  bottom: 10px;
+  left: 35%;
+  width: 300px;
+}
+
+.pikachu {
+  bottom: 10px;
+  left: 46%;
+  width: 280px;
+}
+
+.squirtle {
+  bottom: -80px;
+  left: 5%;
+  width: 400px;
+}
+
+.flip-right {
+  transform: scaleX(-1);
+}
+
+/* ---- TELA DO QUIZ ---- */
+/* ---- TELA DO QUIZ: Ajusta o posicionamento do balão (app-container) ---- */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  /* Posiciona o balão na parte inferior */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding-bottom: 0;
+  /* Remove o padding inferior */
+}
+
+/* ---- Estilo do Balão de Diálogo (DialogueBox) ---- */
+.dialogue-box {
+  /* Configuração Flexbox para alinhamento superior do texto */
+  display: flex;
+  flex-direction: column;
+  /* min-height garante que a caixa não fique muito pequena, mas permite crescer */
+  min-height: 120px;
+
+  /* Posicionamento para alinhar com o balão na imagem de fundo e centralizar */
+  position: absolute;
+  width: 90%;
+  max-width: 1150px;
+  bottom: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-family: 'Press Start 2P', monospace;
+
+  /* Estilo visual da caixa de diálogo */
+  /* background-color: white; */
+  /* border-radius: 0; */
+  /* border: 4px solid #3c3c3c; */
+
+  /* Padding para o texto começar no canto superior esquerdo */
+  padding: 20px 30px;
+
+  color: black;
+  text-align: left;
+}
+
+.dialogue-content {
+  /* Faz o conteúdo principal (texto) ocupar o máximo de espaço possível no topo */
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.dialogue-content p,
+.dialogue-content h2 {
   font-size: 1.2rem;
   margin: 0;
+  padding: 0;
+  color: black;
+  text-shadow: none;
 }
 
-.winner-course {
-  font-size: 2rem;
-  color: #FFD700; /* Cor dourada para destacar */
-  margin-top: 10px;
-  text-shadow: 3px 3px #000;
-  line-height: 1.2;
+/* Ajusta as escolhas para ficarem dentro do balão */
+.dialogue-choices {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-start;
+  /* Garante que os botões se alinhem à esquerda */
+  font-family: 'Press Start 2P', monospace;
 }
 
-.restart-button {
-  z-index: 10;
-  position: absolute;
-  top: 20px;
-  right: 20px;
+.dialogue-choices button {
+  background: #f0f0f0;
+  border: 2px solid #3c3c3c;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  color: black;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #a4a4a4;
+  transition: background-color 0.2s;
+}
+
+.dialogue-choices button:hover {
+  background-color: #ddd;
+}
+
+/* Estilo do botão de ação */
+.dialogue-choices button {
+  background: #ffcc00;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.dialogue-choices button:hover {
+  background: #ffdb4d;
+  transform: scale(1.1);
+}
+
+/* ---- RESPONSIVIDADE ---- */
+@media (max-width: 1024px) {
+  .title {
+    font-size: 3rem;
+  }
+
+  .press {
+    font-size: 1.3rem;
+  }
+
+  .bulbasaur,
+  .charmander,
+  .squirtle,
+  .pikachu {
+    width: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .press {
+    font-size: 1.1rem;
+  }
+
+  .dialogue-box {
+    font-size: 0.9rem;
+    padding: 15px;
+  }
+
+  .dialogue-choices button {
+    font-size: 0.7rem;
+    padding: 8px 16px;
+  }
+
+  .bulbasaur,
+  .charmander,
+  .squirtle,
+  .pikachu {
+    width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .press {
+    font-size: 0.9rem;
+  }
+
+  .dialogue-box {
+    font-size: 0.8rem;
+    padding: 12px;
+  }
+
+  .dialogue-choices {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dialogue-choices button {
+    width: 100%;
+    font-size: 0.7rem;
+    padding: 10px;
+  }
+
+  .bulbasaur,
+  .charmander,
+  .squirtle,
+  .pikachu {
+    width: 45px;
+  }
 }

@@ -1,12 +1,20 @@
-# React + Vite
+# ⚡ Quiz Pokémon - Descubra Seu Curso ⚡
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto é um quiz interativo desenvolvido com **React** e **Vite**, estilizado com uma estética pixel art inspirada em jogos Pokémon. O objetivo é ajudar os usuários a descobrir o perfil profissional que mais se alinha com os cursos superiores do SENAI, como **Análise e Desenvolvimento de Sistemas (ADS)** ou **Tecnologia em Mecatrônica Industrial**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ✨ Funcionalidades Principais
 
-## Expanding the ESLint configuration
+* **🎮 Interface Retrô:** Estilo visual que remete aos jogos clássicos de Pokémon (Professor Carvalho e balões de diálogo).
+* **💬 Fluxo de Diálogo:** Introdução sequencial com animação de digitação e confirmação de início.
+* **📊 Sistema de Pontuação:** As respostas do usuário pontuam para os perfis de ADS, Mecatrônica ou Outros Cursos/Gerais.
+* **🏆 Resultado Personalizado:** Apresenta o curso ideal com base na maior pontuação obtida.
+* **🔄 Reinício Rápido:** Opção de "Refazer Quiz" na tela de resultados.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+##  Autores
+
+- [@Gabriel Cortez](https://github.com/cortezinho)
+- [@Leandro Guidelli](https://github.com/LeandroGuidelli)
+- [@Leonardo Miranda](https://github.com/zZubat)
