@@ -1,42 +1,44 @@
-// src/hooks/useTypewriter.js
+// zzubat/projetoatiex/ProjetoAtiex-3fea5aa86f6b9cbc38e3a20bc11380d730695f27/src/hooks/useTypewriter.js
+
 import { useState, useEffect } from 'react';
 
-// Adiciona initialDelay (em ms) para controlar quando a digitação começa
+// Usa um encadeamento de setTimeout, que é mais robusto que setInterval para este efeito.
 export const useTypewriter = (text, speed = 50, initialDelay = 0) => {
-  const [displayText, setDisplayText] = useState('');
+  // charIndex é a única variável de estado, controlando quantos caracteres são exibidos
+  const [charIndex, setCharIndex] = useState(0); 
 
+  // Efeito 1: Reseta o índice sempre que o texto/velocidade/atraso mudar
   useEffect(() => {
-    // Variáveis para armazenar os IDs dos timers para limpeza
-    let startTypingTimeout;
-    let typingInterval;
-    
-    // Reseta o texto no início de cada efeito
-    setDisplayText(''); 
-
-    if (text) {
-      // 1. Configura um temporizador para iniciar a digitação após o atraso inicial
-      startTypingTimeout = setTimeout(() => {
-        let i = 0;
-        typingInterval = setInterval(() => {
-          if (i < text.length) {
-            setDisplayText(prev => prev + text.charAt(i));
-            i++;
-          } else {
-            // Se o texto estiver completo, definimos o texto final de uma vez e paramos
-            setDisplayText(text); 
-            clearInterval(typingInterval);
-          }
-        }, speed);
-      }, initialDelay); 
-    }
-    
-    // Função de limpeza: Garante que tanto o setTimeout quanto o setInterval sejam cancelados
-    return () => {
-      clearTimeout(startTypingTimeout);
-      clearInterval(typingInterval); 
-    };
-
+    setCharIndex(0); 
   }, [text, speed, initialDelay]);
+
+
+  // Efeito 2: Cria a cadeia de setTimeout para a animação
+  useEffect(() => {
+    // 1. Verifica se o texto é válido ou se a animação já terminou
+    if (!text || charIndex >= text.length) {
+      return; 
+    }
+
+    // 2. Determina o atraso: usa initialDelay apenas para o primeiro caractere (index 0), 
+    //    e a speed para os caracteres seguintes.
+    const delay = charIndex === 0 ? initialDelay : speed;
+    
+    // 3. Configura o temporizador
+    const timeout = setTimeout(() => {
+      // Avança o índice usando a forma funcional para garantir o valor mais recente
+      // O avanço do índice dispara este useEffect novamente, criando o ciclo da animação
+      setCharIndex(prevIndex => prevIndex + 1);
+    }, delay);
+
+    // Função de limpeza: Garante que o timeout pendente seja cancelado a cada re-render
+    return () => clearTimeout(timeout);
+    
+  // A dependência em charIndex cria a "corrente" da animação
+  }, [text, charIndex, speed, initialDelay]);
+
+  // O texto exibido é uma substring do texto completo, determinada por charIndex
+  const displayText = text ? text.substring(0, charIndex) : '';
 
   return displayText;
 };
