@@ -1,5 +1,5 @@
-// src/components/IntroScreen.jsx
-import React, { useState } from 'react';
+// zzubat/projetoatiex/ProjetoAtiex-52deada71db2eb486fff0a4c9e7ff14e37d0a383/src/components/IntroScreen.jsx
+import React, { useState, useEffect } from 'react'; // Importa useEffect
 import DialogueBox from './DialogueBox';
 import backgrounds from '../assets/backgrounds/quiz-bg.png'; // Usando o fundo do quiz
 import { useTypewriter } from '../hooks/useTypewriter'; // Importa o hook
@@ -20,6 +20,13 @@ const DECLINE_STEP = 5;
 function IntroScreen({ onAdvance, onRestart }) { 
   // Estado para controlar o índice do texto atual
   const [step, setStep] = useState(0); 
+  // NOVO ESTADO: controla se a digitação foi pulada no passo atual
+  const [typingSkipped, setTypingSkipped] = useState(false);
+
+  // NOVO EFEITO: Reseta o estado de skip (pulo) sempre que o passo mudar
+  useEffect(() => {
+    setTypingSkipped(false);
+  }, [step]);
 
   let currentText;
   let choices = [];
@@ -33,7 +40,15 @@ function IntroScreen({ onAdvance, onRestart }) {
       // ----------------------------------------------------
       currentText = INTRO_SCRIPT[step];
       choices = [{ text: 'Continuar', value: 'continue' }];
-      onChoiceHandler = () => setStep(prev => prev + 1);
+      
+      const handleContinue = () => {
+          // Só avança se o texto já estiver completo ou se foi pulado
+          if (textToDisplay === currentText) {
+              setStep(prev => prev + 1);
+          }
+      };
+      
+      onChoiceHandler = handleContinue;
 
   } else if (step === CONFIRM_STEP) {
       // ----------------------------------------------------
@@ -72,8 +87,24 @@ function IntroScreen({ onAdvance, onRestart }) {
   // Aplica a animação de digitação ao texto atual
   const animatedText = useTypewriter(currentText, TYPING_SPEED);
 
+  // NOVO: O texto exibido é o completo se foi pulado, senão é o animado
+  const textToDisplay = typingSkipped ? currentText : animatedText;
+
   // Apenas permite a interação quando o texto terminar de ser digitado
-  const showChoices = animatedText === currentText;
+  const showChoices = textToDisplay === currentText;
+  
+  // NOVO HANDLER: Pula a animação se não estiver completa
+  const handleSkipTyping = () => {
+      if (textToDisplay !== currentText) {
+          setTypingSkipped(true);
+      } else if (step < CONFIRM_STEP) {
+          // Se o texto já está completo e estamos nos passos iniciais (0, 1, 2), 
+          // um clique na caixa de diálogo também deve ser tratado como "Continuar"
+          // O handleContinue do onChoiceHandler já faz essa verificação, 
+          // mas é mais intuitivo que o clique na caixa avance.
+          onChoiceHandler(); 
+      }
+  };
 
 
   return (
@@ -81,9 +112,9 @@ function IntroScreen({ onAdvance, onRestart }) {
       className="app-container"
       style={{ backgroundImage: `url(${backgrounds})` }}
     >
-      {/* Passa choices e onChoiceHandler, mas o DialogueBox só mostra os botões se houver choices */}
-      <DialogueBox choices={showChoices ? choices : []} onChoice={onChoiceHandler}> 
-        <p>{animatedText}</p>
+      {/* Adiciona o handler de clique para pular a animação */}
+      <DialogueBox choices={showChoices ? choices : []} onChoice={onChoiceHandler} onClick={handleSkipTyping}> 
+        <p>{textToDisplay}</p>
       </DialogueBox>
     </div>
   );

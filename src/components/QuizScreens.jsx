@@ -1,5 +1,5 @@
-// src/components/QuizScreens.jsx
-import React, { useState } from 'react';
+// zzubat/projetoatiex/ProjetoAtiex-52deada71db2eb486fff0a4c9e7ff14e37d0a383/src/components/QuizScreens.jsx
+import React, { useState, useEffect } from 'react'; // Importa useEffect
 import DialogueBox from './DialogueBox'; 
 import backgrounds from '../assets/backgrounds/quiz-bg.png';
 import quizData from '../data/quizData';
@@ -26,15 +26,20 @@ function QuizScreen({ onRestart }) {
   const [mecatronicaScore, setMecatronicaScore] = useState(0);
   const [outrosScore, setOutrosScore] = useState(0); 
   const [quizFinished, setQuizFinished] = useState(false);
+  // Novo estado para controlar se a digitação foi pulada
+  const [typingSkipped, setTypingSkipped] = useState(false);
   
   const currentQuestion = shuffledQuizData[currentQuestionIndex];
   const TYPING_SPEED = 50; // Velocidade da digitação
 
+  // Efeito para resetar o estado de skip (pulo) quando a pergunta muda
+  useEffect(() => {
+      setTypingSkipped(false);
+  }, [currentQuestionIndex]);
+  
   const handleAnswer = (answer) => {
-    // Verifica se a animação terminou antes de aceitar a resposta
-    if (animatedQuestionText !== currentQuestion.question) {
-        return; 
-    }
+      // Nota: A verificação de animação não é mais estritamente necessária aqui, 
+      // pois os botões só aparecem se showQuizChoices for true, o que requer o texto completo.
       
     if (answer === 'yes') {
       // Adiciona pontuação para os três cursos, garantindo um valor default de 0
@@ -55,8 +60,19 @@ function QuizScreen({ onRestart }) {
   // A chave é usar currentQuestion.question para garantir que o hook reinicie quando a pergunta mudar.
   const animatedQuestionText = useTypewriter(currentQuestion?.question, TYPING_SPEED); 
   
-  // Condição para mostrar as opções: apenas se a animação terminar
-  const showQuizChoices = animatedQuestionText === currentQuestion?.question;
+  // O texto exibido é o completo se foi pulado, ou o animado (se não houver pergunta, é vazio)
+  const textToDisplay = typingSkipped ? currentQuestion?.question : animatedQuestionText;
+
+  // Condição para mostrar as opções: apenas se o texto a ser exibido for o texto completo
+  const showQuizChoices = textToDisplay === currentQuestion?.question;
+
+  // Handler para pular a animação no clique
+  const handleSkipTyping = () => {
+      // Se o quiz não tiver terminado E o texto não for o texto completo (ou seja, a animação está rodando)
+      if (!quizFinished && textToDisplay !== currentQuestion?.question) {
+          setTypingSkipped(true);
+      }
+  };
 
 
   // Função para calcular o texto do resultado
@@ -99,15 +115,19 @@ function QuizScreen({ onRestart }) {
       style={{ backgroundImage: `url(${backgrounds})` }}
     >
       {quizFinished ? (
-        // Na tela de resultado, a animação de digitação não é necessária no resultado final.
+        // Na tela de resultado
         <DialogueBox choices={resultChoices} onChoice={onRestart}>
           <p>Parabéns! O resultado é:</p>
           <h2>{getResultText()}</h2>
         </DialogueBox>
       ) : (
-        // Renderiza a pergunta animada. Só mostra as escolhas depois de terminar.
-        <DialogueBox choices={showQuizChoices ? quizChoices : []} onChoice={handleAnswer}>
-          <p>{animatedQuestionText}</p>
+        // Tela do Quiz. Adiciona o handler de clique para pular a animação.
+        <DialogueBox 
+            choices={showQuizChoices ? quizChoices : []} 
+            onChoice={handleAnswer}
+            onClick={handleSkipTyping} // Adicionado o handler de clique
+        >
+          <p>{textToDisplay}</p>
         </DialogueBox>
       )}
     </div>
