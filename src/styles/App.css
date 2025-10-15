@@ -152,6 +152,14 @@ img {
   /* Remove o padding inferior */
 }
 
+/* NOVO ESTILO: Container de Resultado */
+.app-container.result-screen {
+    /* Centraliza o conteúdo verticalmente */
+    justify-content: center; 
+    /* REMOVIDO: background-image: none !important; e background-color: #2e2e2e;
+       Agora o fundo é definido via style inline no JSX */
+}
+
 /* ---- Estilo do Balão de Diálogo (DialogueBox) ---- */
 .dialogue-box {
   /* Configuração Flexbox para alinhamento superior do texto */
@@ -181,6 +189,30 @@ img {
   color: black;
   text-align: left;
 }
+
+/* NOVO ESTILO: Balão de Resultado Centralizado */
+.dialogue-box.result-box {
+    /* Remove o posicionamento fixo para permitir que o flexbox do pai (result-screen) o posicione */
+    position: relative; 
+    transform: none;
+    bottom: auto;
+    left: auto;
+    border-radius: 20px;
+    background-color: #51f369;
+    
+    /* Centraliza o conteúdo horizontalmente no balão de resultado */
+    text-align: center;
+}
+
+.dialogue-box.result-box .dialogue-content p,
+.dialogue-box.result-box .dialogue-content h2 {
+    text-align: center; /* Centraliza o texto */
+}
+
+.dialogue-box.result-box .dialogue-choices {
+    justify-content: center; /* Centraliza o botão de "Refazer Quiz" */
+}
+
 
 .dialogue-content {
   /* Faz o conteúdo principal (texto) ocupar o máximo de espaço possível no topo */
