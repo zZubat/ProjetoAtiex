@@ -73,30 +73,35 @@ function QuizScreen({ onRestart }) {
     }
   };
 
-
   // Função para calcular o texto do resultado
-  const getResultText = () => {
-    const scores = {
-      'Análise e Desenvolvimento de Sistemas': adsScore,
-      'Tecnologia em Mecatrônica Industrial': mecatronicaScore,
-      'Outros Cursos Técnicos/Gerais': outrosScore
-    };
+const getResultText = () => {
+  // Se o usuário respondeu "Não" para tudo (todas as pontuações = 0)
+  if (adsScore === 0 && mecatronicaScore === 0 && outrosScore === 0) {
+    return "Parece que você ainda está explorando suas opções. Nenhum curso se encaixou totalmente, mas continue tentando!";
+  }
 
-    const maxScore = Math.max(adsScore, mecatronicaScore, outrosScore);
-    const winners = Object.keys(scores).filter(course => scores[course] === maxScore);
-
-    if (winners.length === 1) {
-      return `Seu curso ideal é ${winners[0]}!`;
-    } else if (winners.length === 2) {
-      if (winners.includes('Outros Cursos Técnicos/Gerais')) {
-        const specificCourse = winners.find(c => c !== 'Outros Cursos Técnicos/Gerais');
-        return `Você se encaixa em ${specificCourse} e em outras áreas!`;
-      }
-      return `Você se encaixa bem nos cursos de ${winners[0]} e ${winners[1]}!`;
-    } else {
-      return 'Você se encaixa em todos os perfis de curso, explore suas opções!';
-    }
+  const scores = {
+    'Análise e Desenvolvimento de Sistemas': adsScore,
+    'Tecnologia em Mecatrônica Industrial': mecatronicaScore,
+    'Outros Cursos Técnicos/Gerais': outrosScore
   };
+
+  const maxScore = Math.max(adsScore, mecatronicaScore, outrosScore);
+  const winners = Object.keys(scores).filter(course => scores[course] === maxScore);
+
+  if (winners.length === 1) {
+    return `Seu curso ideal é ${winners[0]}!`;
+  } else if (winners.length === 2) {
+    if (winners.includes('Outros Cursos Técnicos/Gerais')) {
+      const specificCourse = winners.find(c => c !== 'Outros Cursos Técnicos/Gerais');
+      return `Você se encaixa em ${specificCourse} e em outras áreas!`;
+    }
+    return `Você se encaixa bem nos cursos de ${winners[0]} e ${winners[1]}!`;
+  } else {
+    return 'Você se encaixa em todos os perfis de curso, explore suas opções!';
+  }
+};
+
 
   const quizChoices = [
     { text: 'Sim', value: 'yes' },
