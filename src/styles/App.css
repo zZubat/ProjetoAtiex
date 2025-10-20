@@ -170,9 +170,9 @@ img {
 
   /* Posicionamento para alinhar com o balão na imagem de fundo e centralizar */
   position: absolute;
-  width: 90%;
+  width: 60%;
   max-width: 1150px;
-  bottom: 85px;
+  bottom: 70px;
   left: 50%;
   transform: translateX(-50%);
 
