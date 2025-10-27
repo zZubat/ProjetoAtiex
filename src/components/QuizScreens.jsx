@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'; // Adicionado useRef e useEffect
 import DialogueBox from './DialogueBox';
 import backgrounds from '../assets/backgrounds/quiz-bg.png';
-import resultBackground from '../assets/backgrounds/intro-bg.png';
+import resultBackground from '../assets/backgrounds/intro-bg2.png';
 import quizData from '../data/quizData';
 import { useTypewriter } from '../hooks/useTypewriter';
 
