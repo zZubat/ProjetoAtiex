@@ -146,7 +146,7 @@ img {
  justify-content: flex-end;
  background-repeat: no-repeat;
  background-size: cover;
- background-position: center;
+ background-position: center bottom;
  padding-bottom: 0;
 }
 
@@ -163,7 +163,7 @@ img {
  position: absolute;
  width: 60%;
  max-width: 1150px;
- bottom: 70px;
+ bottom: 150px;
  left: 50%;
  transform: translateX(-50%);
  font-family: 'Press Start 2P', monospace;
